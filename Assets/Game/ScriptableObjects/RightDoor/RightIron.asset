@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a60567a7550f142b45448ec7836066, type: 3}
+  m_Name: RightIron
+  m_EditorClassIdentifier: 
+  MaxHealth: 200
+  damageSound: {fileID: 8300000, guid: 50d60ea4692381240aa81bed2c9ef739, type: 3}
+  stages:
+  - threshold: 200
+    sprite: {fileID: -1823789199, guid: 96e55f24026cabd4d9de34ef03738adf, type: 3}
+    thresholdSound: {fileID: 0}
+  - threshold: 140
+    sprite: {fileID: 1885834623, guid: 96e55f24026cabd4d9de34ef03738adf, type: 3}
+    thresholdSound: {fileID: 8300000, guid: 007ab5c184082fa4ea530ea20165ebf6, type: 3}
+  - threshold: 100
+    sprite: {fileID: -1932845291, guid: 96e55f24026cabd4d9de34ef03738adf, type: 3}
+    thresholdSound: {fileID: 8300000, guid: 007ab5c184082fa4ea530ea20165ebf6, type: 3}
+  - threshold: 50
+    sprite: {fileID: 245323692, guid: 96e55f24026cabd4d9de34ef03738adf, type: 3}
+    thresholdSound: {fileID: 8300000, guid: 007ab5c184082fa4ea530ea20165ebf6, type: 3}
+  - threshold: 0
+    sprite: {fileID: -1058627240, guid: 96e55f24026cabd4d9de34ef03738adf, type: 3}
+    thresholdSound: {fileID: 8300000, guid: ecdfdec525cd5e040ba50fac9a265273, type: 3}
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
