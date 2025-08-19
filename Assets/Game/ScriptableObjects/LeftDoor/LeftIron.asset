@@ -30,5 +30,5 @@ MonoBehaviour:
   - threshold: 0
     sprite: {fileID: 980869048, guid: 96e55f24026cabd4d9de34ef03738adf, type: 3}
     thresholdSound: {fileID: 8300000, guid: ecdfdec525cd5e040ba50fac9a265273, type: 3}
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  openSound: {fileID: 8300000, guid: 4888fcbd154285542bfe5097fc2e2ea9, type: 3}
+  closeSound: {fileID: 8300000, guid: 94000939d490f404d9333a8222654c85, type: 3}
