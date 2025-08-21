@@ -1,47 +1,48 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Zenject;
 
 public class MobileButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public enum ButtonType { Left, Right, Shoot }
     public ButtonType buttonType;
 
-    private PlayerController _player;
+    private SignalBus _signalBus;
 
-    private void Start()
+    [Inject]
+    public void Construct(SignalBus signalBus)
     {
-        _player = FindObjectOfType<PlayerController>(); // ваще пиздец надо как с эти Player'ом решать как сделать через zenject 
+        _signalBus = signalBus;
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (_player == null) return;
-
         switch (buttonType)
         {
             case ButtonType.Left:
-                _player.MoveLeftDown();
+                _signalBus.Fire(new MoveLeftSignal(true));
                 break;
             case ButtonType.Right:
-                _player.MoveRightDown();
+                _signalBus.Fire(new MoveRightSignal(true));
                 break;
             case ButtonType.Shoot:
-                _player.OnShootButton();
+                _signalBus.Fire(new ShootSignal(true));
                 break;
         }
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (_player == null) return;
-
         switch (buttonType)
         {
             case ButtonType.Left:
-                _player.MoveLeftUp();
+                _signalBus.Fire(new MoveLeftSignal(false));
                 break;
             case ButtonType.Right:
-                _player.MoveRightUp();
+                _signalBus.Fire(new MoveRightSignal(false));
+                break;
+            case ButtonType.Shoot:
+                _signalBus.Fire(new ShootSignal(false));
                 break;
         }
     }
