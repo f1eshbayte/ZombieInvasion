@@ -1,16 +1,18 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
 
+[RequireComponent(typeof(BoxCollider2D))]
 public class Door : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private DoorID doorId;
-    
-    private DoorData _data;
 
+    private DoorData _data;
     private DoorUpgrade _upgradeManager;
+    private BoxCollider2D _boxCollider2D;
 
     public int CurrentHealth { get; private set; }
     private int _currentStageIndex = -1;
@@ -20,10 +22,10 @@ public class Door : MonoBehaviour
 
     private void Start()
     {
+        _boxCollider2D = GetComponent<BoxCollider2D>();
         CurrentHealth = _data.MaxHealth;
         UpdateDoorVisual();
     }
-
 
     [Inject]
     public void Construct(DiContainer container)
@@ -32,12 +34,14 @@ public class Door : MonoBehaviour
         _upgradeManager = container.ResolveId<DoorUpgrade>(doorId);
         _upgradeManager.RegisterDoor(this);
     }
-    
+
     public void TakeDamage(int amount)
     {
+        if (IsBroken())
+            return;
         CurrentHealth = Mathf.Max(CurrentHealth - amount, 0);
-        if (CurrentHealth > 0)
-            PlaySound(_data.damageSound);
+        // if (CurrentHealth > 0)
+        PlaySound(_data.damageSound);
 
         UpdateDoorVisual();
     }
@@ -50,33 +54,15 @@ public class Door : MonoBehaviour
 
     public void SetState()
     {
+        if (IsBroken())
+            return;
+
         if (_isOpen)
             Close();
         else
             Open();
-    } 
-
-    private void Open()
-    {
-        if (_isOpen) 
-            return;
-        
-        gameObject.transform.localRotation = Quaternion.Euler(0, -180, 0);
-        Debug.Log("дверь открылась");
-        _isOpen = true;
-        PlaySound(_data.openSound);
     }
 
-    private void Close()
-    {
-        if (!_isOpen) 
-            return;
-        gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
-        
-        Debug.Log("дверь закрылась");
-        _isOpen = false;
-        PlaySound(_data.closeSound);
-    }
     public void SetData(DoorData newData)
     {
         if (newData == null)
@@ -89,6 +75,44 @@ public class Door : MonoBehaviour
         CurrentHealth = _data.MaxHealth;
         _currentStageIndex = -1;
         UpdateDoorVisual();
+
+    }
+
+
+    private void Open()
+    {
+        if (_isOpen)
+            return;
+
+        gameObject.transform.localRotation = Quaternion.Euler(0, -180, 0);
+        _boxCollider2D.enabled = false;
+        Debug.Log("дверь открылась");
+        _isOpen = true;
+        PlaySound(_data.openSound);
+    }
+
+    private void Close()
+    {
+        if (!_isOpen)
+            return;
+
+        gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        _boxCollider2D.enabled = true;
+
+        Debug.Log("дверь закрылась");
+        _isOpen = false;
+        PlaySound(_data.closeSound);
+    }
+
+    private bool IsBroken()
+    {
+        if (CurrentHealth <= 0)
+        {
+            _boxCollider2D.enabled = false;
+            return true;
+        }
+
+        return false;
     }
 
     private void UpdateDoorVisual()

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
@@ -13,6 +15,10 @@ public class Player : MonoBehaviour
     public float Speed => _speed;
     public Weapon CurrentWeapon => _currentWeapon;
     public int Money { get; private set; }
+    
+    public event UnityAction<int> MoneyChanged;
+    public event UnityAction<int, int> HealthChanged; 
+    
 
     private void Start()
     {
@@ -22,13 +28,27 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (!IsDied())
-            _currentHealth -= damage;
+        _currentHealth -= damage;
+        if (IsDied())
+        {
+            Death();
+        }
     }
 
-    public void EnemyDied(int reward)
+    public void OnEnemyDied(int reward)
     {
         Money += reward;
+    }
+
+    public void AddMoney(int money)
+    {
+        Money += money;
+        MoneyChanged?.Invoke(Money);
+    }
+
+    private void Death()
+    {
+        gameObject.SetActive(false);
     }
 
     private bool IsDied()
