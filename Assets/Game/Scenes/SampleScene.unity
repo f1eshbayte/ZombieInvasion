@@ -429,7 +429,7 @@ MonoBehaviour:
   - Templates:
     - {fileID: 505665527947502824, guid: 5b9070b37a9669149bd1234c03128338, type: 3}
     Delay: 2
-    Count: 4
+    Count: 2
   _spawnPoint: {fileID: 621722819}
   _player: {fileID: 1483797193}
   _door: {fileID: 965082680}
@@ -1602,8 +1602,8 @@ MonoBehaviour:
   _waves:
   - Templates:
     - {fileID: 505665527947502824, guid: 5b9070b37a9669149bd1234c03128338, type: 3}
-    Delay: 0
-    Count: 0
+    Delay: 5
+    Count: 2
   _spawnPoint: {fileID: 1153537834}
   _player: {fileID: 1483797193}
   _door: {fileID: 1047780169}

@@ -11,7 +11,6 @@ public class Spawner : ObjectPool
     [SerializeField] private Player _player;
     [SerializeField] private Door _door;
 
-    
     private Wave _currentWave;
     private int _currentWaveNumber = 0;
     private float _timeAfterLastSpawn;
@@ -20,7 +19,6 @@ public class Spawner : ObjectPool
     private int _layer = 1;
 
     public event UnityAction AllEnemySpawned;
-
     public event UnityAction<int, int> EnemyCountChanged;
 
     private void Start()
@@ -34,49 +32,62 @@ public class Spawner : ObjectPool
             return;
 
         _timeAfterLastSpawn += Time.deltaTime;
-        
-        if (_timeAfterLastSpawn >= _currentWave.Delay)
+
+        if (_timeAfterLastSpawn >= _currentWave.Delay && _spawned < _currentWave.Count)
         {
-            InstantiateEnemy();
+            SpawnEnemy();
             _spawned++;
             _timeAfterLastSpawn = 0;
+
             EnemyCountChanged?.Invoke(_spawned, _currentWave.Count);
         }
 
-        if (_currentWave.Count <= _spawned)
+        if (_spawned >= _currentWave.Count)
         {
             if (_waves.Count > _currentWaveNumber + 1)
                 AllEnemySpawned?.Invoke();
 
             _currentWave = null;
         }
-        
     }
-    
-    private void InstantiateEnemy()
+
+    private void SpawnEnemy()
     {
-        var randomEnemy = Random.Range(0, _currentWave.Templates.Count);
-        
-        Enemy enemy = Instantiate(_currentWave.Templates[randomEnemy], _spawnPoint.position, _spawnPoint.rotation, _spawnPoint)
-            .GetComponent<Enemy>();
-        
+        int randomIndex = Random.Range(0, _currentWave.Templates.Count);
+        GameObject prefab = _currentWave.Templates[randomIndex];
+
+        if (TryGetObject(out GameObject enemyObj) == false)
+            enemyObj = CreateObject(prefab);
+
+        enemyObj.transform.position = _spawnPoint.position;
+        enemyObj.transform.rotation = _spawnPoint.rotation;
+        enemyObj.SetActive(true);
+
+        Enemy enemy = enemyObj.GetComponent<Enemy>();
         enemy.GetComponent<SpriteRenderer>().sortingOrder = ++_layer;
         enemy.Init(_player, _door);
-        
+
         enemy.Dying += OnEnemyDying;
     }
+
     private void OnEnemyDying(Enemy enemy)
     {
         enemy.Dying -= OnEnemyDying;
 
         _player.AddMoney(enemy.Reward);
+
+        // Возвращаем в пул
+        enemy.gameObject.SetActive(false);
     }
 
     private void SetWave(int index)
     {
         _currentWave = _waves[index];
+        _spawned = 0;
+        _timeAfterLastSpawn = 0;
     }
 }
+
 
 [Serializable]
 public class Wave
