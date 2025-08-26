@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Enemy))]
@@ -8,18 +5,25 @@ public class EnemyStateMachine : MonoBehaviour
 {
     [SerializeField] private State _firstState;
     
-    private Player _targetPlayer;
-    private Door _targetDoor;
+    // private Player _targetPlayer;
+    // private Door _targetDoor;
     private State _currentState;
+    private Enemy _enemy;
 
-    public State Current => _currentState;
+    // public State Current => _currentState;
 
-    private void Start()
+    private void Awake()
     {
-        _targetPlayer = GetComponent<Enemy>().TargetPlayer;
-        _targetDoor = GetComponent<Enemy>().TargetDoor;
-        Reset(_firstState);
+        _enemy = GetComponent<Enemy>();
     }
+
+    // private void Start()
+    // {
+    //     _targetPlayer = GetComponent<Enemy>().TargetPlayer;
+    //     _targetDoor = GetComponent<Enemy>().TargetDoor;
+    //     Reset(_firstState);
+    // }
+    
 
     private void Update()
     {
@@ -29,16 +33,15 @@ public class EnemyStateMachine : MonoBehaviour
         var nextState = _currentState.GetNextState();
         if(nextState != null)
             Transit(nextState);
-            
     }
 
-    private void Reset(State startState)
+    public void ResetStateMachine()
     {
-        _currentState = startState;
-        if(_currentState != null)
-            _currentState.Enter(_targetPlayer, _targetDoor);
+        if (_currentState != null)
+            _currentState.Exit(); // отключаем старое состояние
+        Transit(_firstState);
     }
-
+    
     private void Transit(State nextState)
     {
         if (_currentState != null)
@@ -47,6 +50,7 @@ public class EnemyStateMachine : MonoBehaviour
         _currentState = nextState;
         
         if(_currentState != null)
-            _currentState.Enter(_targetPlayer, _targetDoor);
+            _currentState.Enter(_enemy.TargetPlayer, _enemy.TargetDoor);
+
     }
 }

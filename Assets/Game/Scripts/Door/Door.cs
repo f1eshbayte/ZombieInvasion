@@ -40,7 +40,6 @@ public class Door : MonoBehaviour
         if (IsBroken())
             return;
         CurrentHealth = Mathf.Max(CurrentHealth - amount, 0);
-        // if (CurrentHealth > 0)
         PlaySound(_data.damageSound);
 
         UpdateDoorVisual();
@@ -67,7 +66,6 @@ public class Door : MonoBehaviour
     {
         if (newData == null)
         {
-            Debug.LogError("DoorData is null!");
             return;
         }
 
@@ -86,7 +84,6 @@ public class Door : MonoBehaviour
 
         gameObject.transform.localRotation = Quaternion.Euler(0, -180, 0);
         _boxCollider2D.enabled = false;
-        Debug.Log("дверь открылась");
         _isOpen = true;
         PlaySound(_data.openSound);
     }
@@ -99,7 +96,6 @@ public class Door : MonoBehaviour
         gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
         _boxCollider2D.enabled = true;
 
-        Debug.Log("дверь закрылась");
         _isOpen = false;
         PlaySound(_data.closeSound);
     }

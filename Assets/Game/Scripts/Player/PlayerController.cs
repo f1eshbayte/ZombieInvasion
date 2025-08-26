@@ -4,7 +4,7 @@ using Zenject;
 [RequireComponent(typeof(Player))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private Transform _raycastPoint; 
+    [SerializeField] private Transform _raycastPoint;
     [SerializeField] int _maxLimitPositionX = 6;
     [SerializeField] int _minLimitPositionX = -6;
 
@@ -29,10 +29,9 @@ public class PlayerController : MonoBehaviour
         _player = GetComponent<Player>();
         _playerVisual = GetComponent<PlayerVisual>();
         _input = new PlayerInput();
-       
-        _input.Player.Shoot.performed += ctx => _signalBus.Fire(new ShootSignal(true));   // Нажатие
-        _input.Player.Shoot.canceled  += ctx => _signalBus.Fire(new ShootSignal(false)); // Отпускание
 
+        _input.Player.Shoot.performed += ctx => _signalBus.Fire(new ShootSignal(true)); 
+        _input.Player.Shoot.canceled += ctx => _signalBus.Fire(new ShootSignal(false)); 
     }
 
     private void OnEnable()
@@ -55,24 +54,36 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        // ===== Мобильное управление =====
+        var mobileDir = MobileMove();
+        var keyboardDir = PCMove();
+
+        SetPriority(mobileDir, keyboardDir);
+
+        Move(_direction);
+    }
+
+    private void SetPriority(Vector2 mobileDir, Vector2 keyboardDir)
+    {
+        _direction = mobileDir != Vector2.zero ? mobileDir : keyboardDir;
+    }
+
+    private Vector2 PCMove()
+    {
+        Vector2 keyboardDir = _input.Player.Move.ReadValue<Vector2>();
+        return keyboardDir;
+    }
+
+    private Vector2 MobileMove()
+    {
         Vector2 mobileDir = Vector2.zero;
         if (_moveLeft)
             mobileDir = Vector2.left;
         if (_moveRight)
             mobileDir = Vector2.right;
-
-        // ===== ПК управление =====
-        Vector2 keyboardDir = _input.Player.Move.ReadValue<Vector2>();
-
-        // Если есть мобильное управление, оно имеет приоритет
-        _direction = mobileDir != Vector2.zero ? mobileDir : keyboardDir;
-
-        Move(_direction);
+        return mobileDir;
     }
 
 
-    // ===== Signals =====
     private void OnMoveLeft(MoveLeftSignal signal)
     {
         _moveLeft = signal.IsDown;
@@ -88,7 +99,6 @@ public class PlayerController : MonoBehaviour
         _player.CurrentWeapon.HandleShooting(_raycastPoint, _playerVisual, signal.IsDown);
     }
 
-    // ===== Движение =====
     private void Move(Vector2 direction)
     {
         // left
