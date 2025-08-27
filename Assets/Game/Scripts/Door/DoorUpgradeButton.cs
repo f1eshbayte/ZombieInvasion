@@ -3,16 +3,16 @@ using Zenject;
 
 public class DoorUpgradeButton : MonoBehaviour
 {
-    private DoorUpgradeManager _manager;
+    private DoorUpgradeService _service;
 
     [Inject]
-    public void Construct(DoorUpgradeManager manager)
+    public void Construct(DoorUpgradeService service)
     {
-        _manager = manager;
+        _service = service;
     }
 
     public void OnUpgradeButtonClicked()
     {
-        _manager.UpgradeBothDoors();
+        _service.UpgradeBothDoors();
     }
 }

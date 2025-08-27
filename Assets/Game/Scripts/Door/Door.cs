@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
@@ -45,9 +44,10 @@ public class Door : MonoBehaviour
         UpdateDoorVisual();
     }
 
-    public void Repair(int amount)
+    public void Repair()
     {
-        CurrentHealth = Mathf.Min(CurrentHealth + amount, _data.MaxHealth);
+        CurrentHealth = _data.MaxHealth;
+        _boxCollider2D.enabled = true;
         UpdateDoorVisual();
     }
 
@@ -73,8 +73,8 @@ public class Door : MonoBehaviour
         CurrentHealth = _data.MaxHealth;
         _currentStageIndex = -1;
         UpdateDoorVisual();
-
     }
+    
 
 
     private void Open()

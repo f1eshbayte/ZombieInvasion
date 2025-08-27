@@ -1,11 +1,11 @@
 using Zenject;
 
-public class DoorUpgradeManager
+public class DoorUpgradeService 
 {
     private readonly DoorUpgrade _leftDoorUpgrade;
     private readonly DoorUpgrade _rightDoorUpgrade;
 
-    public DoorUpgradeManager([Inject(Id = DoorID.LeftDoor)] DoorUpgrade left, [Inject(Id = DoorID.RightDoor)] DoorUpgrade right)
+    public DoorUpgradeService([Inject(Id = DoorID.LeftDoor)] DoorUpgrade left, [Inject(Id = DoorID.RightDoor)] DoorUpgrade right)
     {
         _leftDoorUpgrade = left;
         _rightDoorUpgrade = right;

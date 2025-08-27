@@ -12,7 +12,7 @@ public class DoorData : ScriptableObject
     {
         public int threshold; // HP <= threshold
         public Sprite sprite; // Спрайт для этой стадии
-        public AudioClip thresholdSound; // Звук получения урона
+        public AudioClip thresholdSound; 
     }
 
     public List<DoorStage> stages;

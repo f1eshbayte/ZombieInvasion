@@ -36,7 +36,10 @@ public class DoorUpgrade
         {
             _currentLevel++;
             if (_doorInstance != null)
+            {
                 _doorInstance.SetData(GetCurrentDoorData());
+                _doorInstance.Repair();
+            }
         }
         
     }

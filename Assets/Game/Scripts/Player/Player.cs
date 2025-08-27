@@ -8,17 +8,18 @@ public class Player : MonoBehaviour
     [SerializeField] private float _speed;
     [SerializeField] private List<Weapon> _weapons;
 
+    private int _currentHealth;
     private Weapon _currentWeapon;
+    private DoorUpgradeItem _doorUpgradeItem;
     public int AidKitCount { get; private set; }
     public int Money { get; private set; } = 50;
-    
-    private int _currentHealth;
-
+    public int Fragments { get; private set; } = 50;
     public float Speed => _speed;
     public Weapon CurrentWeapon => _currentWeapon;
     
     public event UnityAction<int> MoneyChanged;
     public event UnityAction<int> AidKitChanged;
+    public event UnityAction<int> FragmentsChanged;
     public event UnityAction<int, int> HealthChanged;
     public event UnityAction<int> DamageTaken;
 
@@ -71,8 +72,24 @@ public class Player : MonoBehaviour
                 AidKitChanged?.Invoke(AidKitCount);
                 Debug.Log($"Куплена аптечка. Всего аптечек: {AidKitCount}");
                 break;
+            case DoorUpgradeItem doorItem:
+                Debug.Log("Двери ПРОКАЧАНЫ");
+                break;
         }
     }
+
+    public void SpendResources(int price, int fragmentsCount = 0)
+    {
+        Money -= price;
+        MoneyChanged?.Invoke(Money);
+
+        if (fragmentsCount > 0)
+        {
+            Fragments -= fragmentsCount;
+            FragmentsChanged?.Invoke(Fragments);
+        }
+    }
+    
 
     private void Death()
     {

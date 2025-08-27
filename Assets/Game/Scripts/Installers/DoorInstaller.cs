@@ -19,7 +19,7 @@ public class DoorInstaller : MonoInstaller
     {
         BindDoor(DoorID.LeftDoor, _leftDoor, _leftWoodenDoor, _leftStrongWoodenDoor, _leftIronDoor);
         BindDoor(DoorID.RightDoor, _rightDoor, _rightWoodenDoor, _rightStrongWoodenDoor, _rightIronDoor);
-        Container.Bind<DoorUpgradeManager>().AsSingle();
+        Container.Bind<DoorUpgradeService>().AsSingle();
     }
 
     private void BindDoor(DoorID id, Door door, DoorData wooden, DoorData strongWooden, DoorData iron)

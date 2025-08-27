@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.XR.OpenVR;
 using UnityEngine;
 using Zenject;
 
@@ -10,17 +9,22 @@ public class Shop : MonoBehaviour
     [SerializeField] private GameObject _itemContainer;
 
     private Player _player;
+    private DiContainer _container;
 
     [Inject]
-    public void Construct(Player player)
+    public void Construct(Player player, DiContainer container)
     {
         _player = player;
+        _container = container;
     }
 
     private void Start()
     {
         foreach (var item in _items)
         {
+            if(item is DoorUpgradeItem doorItem)
+                _container.Inject(doorItem);
+            
             if (item is IShopItem shopItem)
                 AddItem(shopItem);
             else
@@ -42,7 +46,16 @@ public class Shop : MonoBehaviour
 
     private void TrySellItem(IShopItem item, ItemView view)
     {
-        if (item.Price <= _player.Money)
+        if (item is DoorUpgradeItem doorItem)
+        {
+            if (doorItem.TryBuy(_player))
+            {
+                view.Render(item);
+                if (doorItem.Price == 0)
+                    view.DisableButton();
+            }
+        }
+        else if (item.Price <= _player.Money)
         {
             _player.BuyItem(item);
             if (item is Weapon weapon && weapon.IsBuyed == false)

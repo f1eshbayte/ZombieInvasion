@@ -10,7 +10,6 @@ public class ItemView : MonoBehaviour
     [SerializeField] private Button _sellButton;
     [SerializeField] private Image _icon;
 
-
     private IShopItem _item;
 
     public event UnityAction<IShopItem, ItemView> SellButtonClick; 
@@ -37,18 +36,15 @@ public class ItemView : MonoBehaviour
         TryLockItem();
     }
 
+    public void DisableButton()
+    {
+        _sellButton.interactable = false;
+    }
+
     private void TryLockItem()
     {
         if (_item is Weapon weapon && weapon.IsBuyed)
-            _sellButton.interactable = false;
-        // if (_item is Weapon weapon && weapon.IsBuyed)
-        // {
-        //     _sellButton.interactable = false;
-        // }
-        // else
-        // {
-        //     _sellButton.interactable = true; // аптечки и некупленное оружие доступны
-        // }
+            DisableButton();
     }
     
     private void OnButtonClick()
