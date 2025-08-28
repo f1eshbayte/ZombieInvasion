@@ -12,6 +12,7 @@ public class HealthBar : MonoBehaviour
     private void Awake()
     {
         _healthBar = GetComponent<Slider>();
+        _healthBar.interactable = false;
     }
 
     [Inject]

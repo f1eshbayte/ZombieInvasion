@@ -49,7 +49,7 @@ MonoBehaviour:
   _price: 1
   _isBuyed: 0
   _icon: {fileID: -1865205524, guid: 43b3901c7db0fe44cb2131bbc5760a22, type: 3}
-  _isAutomatic: 1
+  _isAutomatic: 0
   _fireRate: 0.5
   _maxDistance: 3
   _damage: 10

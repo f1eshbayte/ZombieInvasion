@@ -39,7 +39,7 @@ public class Door : MonoBehaviour
         if (IsBroken())
             return;
         CurrentHealth = Mathf.Max(CurrentHealth - amount, 0);
-        PlaySound(_data.damageSound);
+        PlaySound(_data.DamageSound);
 
         UpdateDoorVisual();
     }
@@ -48,6 +48,7 @@ public class Door : MonoBehaviour
     {
         CurrentHealth = _data.MaxHealth;
         _boxCollider2D.enabled = true;
+        Close();
         UpdateDoorVisual();
     }
 
@@ -85,7 +86,7 @@ public class Door : MonoBehaviour
         gameObject.transform.localRotation = Quaternion.Euler(0, -180, 0);
         _boxCollider2D.enabled = false;
         _isOpen = true;
-        PlaySound(_data.openSound);
+        PlaySound(_data.OpenSound);
     }
 
     private void Close()
@@ -97,7 +98,7 @@ public class Door : MonoBehaviour
         _boxCollider2D.enabled = true;
 
         _isOpen = false;
-        PlaySound(_data.closeSound);
+        PlaySound(_data.CloseSound);
     }
 
     private bool IsBroken()
@@ -115,20 +116,20 @@ public class Door : MonoBehaviour
     {
         int newStageIndex = 0;
 
-        for (int i = 0; i < _data.stages.Count; i++)
+        for (int i = 0; i < _data.Stages.Count; i++)
         {
-            if (CurrentHealth <= _data.stages[i].threshold)
+            if (CurrentHealth <= _data.Stages[i].Threshold)
                 newStageIndex = i;
         }
 
         if (newStageIndex != _currentStageIndex)
         {
             _currentStageIndex = newStageIndex;
-            _spriteRenderer.sprite = _data.stages[_currentStageIndex].sprite;
+            _spriteRenderer.sprite = _data.Stages[_currentStageIndex].Sprite;
 
-            var stage = _data.stages[_currentStageIndex];
-            if (stage.thresholdSound != null)
-                PlaySound(stage.thresholdSound);
+            var stage = _data.Stages[_currentStageIndex];
+            if (stage.ThresholdSound != null)
+                PlaySound(stage.ThresholdSound);
 
             OnDoorStageChanged?.Invoke(_currentStageIndex);
         }

@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,6 +12,7 @@ public class ItemView : MonoBehaviour
     [SerializeField] private Image _icon;
 
     private IShopItem _item;
+    public event Action OnDestroyed;
 
     public event UnityAction<IShopItem, ItemView> SellButtonClick; 
     private void OnEnable()
@@ -23,8 +25,10 @@ public class ItemView : MonoBehaviour
     {
         _sellButton.onClick.RemoveListener(OnButtonClick);
         _sellButton.onClick.RemoveListener(TryLockItem);
+        OnDestroyed?.Invoke(); // уведомляем подписчиков
     }
     
+
     public void Render(IShopItem item)
     {
         _item = item;

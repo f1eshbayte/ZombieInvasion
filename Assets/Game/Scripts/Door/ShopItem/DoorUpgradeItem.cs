@@ -7,17 +7,18 @@ public class DoorUpgradeItem : MonoBehaviour, IShopItem
     [SerializeField] private Sprite[] _icons;
     [SerializeField] private int[] _prices;
     
-    private DoorUpgradeService _service;
-    [NonSerialized] private int _currentUpgradeIndex = 0;
+    private DoorService _service;
+    [NonSerialized] private int _currentUpgradeIndex;
     
     public string Label => GetLabel();
     public int Price => GetPrice();
     public Sprite Icon => GetIcon();
 
     [Inject]
-    public void Construct(DoorUpgradeService service)
+    public void Construct(DoorService service)
     {
         _service = service;
+        _currentUpgradeIndex = 0;
     }
 
     public bool TryBuy(Player player)
@@ -35,6 +36,11 @@ public class DoorUpgradeItem : MonoBehaviour, IShopItem
 
         return false;
     }
+
+    // public void ResetUpgradeIndex()
+    // {
+    //     _currentUpgradeIndex = 0;
+    // }
     
     private string GetLabel()
     {

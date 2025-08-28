@@ -10,6 +10,8 @@ public class Spawner : ObjectPool
     [SerializeField] private List<Wave> _waves;
     [SerializeField] private Transform _spawnPoint;
     [SerializeField] private Door _door;
+    [SerializeField, Range(0f, 1f)] private float _fragmentDropChance = 0.3f; 
+    [SerializeField] private Vector2Int _fragmentDropRange = new Vector2Int(1, 6); 
 
     private Player _player;
     private Wave _currentWave;
@@ -82,9 +84,9 @@ public class Spawner : ObjectPool
     private void SpawnEnemy()
     {
         int randomIndex = Random.Range(0, _currentWave.Templates.Count);
-        UnityEngine.GameObject prefab = _currentWave.Templates[randomIndex];
+        GameObject prefab = _currentWave.Templates[randomIndex];
 
-        if (TryGetObject(out UnityEngine.GameObject enemyObj) == false)
+        if (TryGetObject(out GameObject enemyObj) == false)
             enemyObj = CreateObject(prefab);
 
         enemyObj.transform.position = _spawnPoint.position;
@@ -104,9 +106,15 @@ public class Spawner : ObjectPool
         enemy.Dying -= OnEnemyDying;
 
         _player.AddMoney(enemy.Reward);
-        
-        // enemy.gameObject.SetActive(false);
+
+        if (Random.value < _fragmentDropChance)
+        {
+            int fragments = Random.Range(_fragmentDropRange.x, _fragmentDropRange.y + 1);
+            _player.AddFragments(fragments);
+            Debug.Log($"Игрок получил {fragments} фрагментов!");
+        }
     }
+
 
     private void SetWave(int index)
     {
@@ -120,7 +128,7 @@ public class Spawner : ObjectPool
 [Serializable]
 public class Wave
 {
-    public List<UnityEngine.GameObject> Templates;
+    public List<GameObject> Templates;
     public float Delay;
     public int Count;
 }

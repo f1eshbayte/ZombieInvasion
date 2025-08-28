@@ -11,47 +11,32 @@ public class PlayerController : MonoBehaviour
     private Player _player;
     private PlayerVisual _playerVisual;
     private PlayerInput _input;
-
-    private Vector2 _direction;
-    private bool _moveLeft;
-    private bool _moveRight;
-
     private SignalBus _signalBus;
+    private AidKit _aidKit;
+    private Vector2 _direction;
+    
+    private bool _moveLeft;
+    private bool _moveRight;    
+    private bool _isMenuOpen = false;
 
     [Inject]
-    public void Construct(SignalBus signalBus)
+    public void Construct(SignalBus signalBus, Player player, AidKit kit)
     {
         _signalBus = signalBus;
+        _player = player;
+        _aidKit = kit;
     }
 
     private void Awake()
     {
-        _player = GetComponent<Player>();
+        // _player = GetComponent<Player>(); // вот хз по сути тут можно модно через zenject прокинуть
         _playerVisual = GetComponent<PlayerVisual>();
         _input = new PlayerInput();
 
-        _input.Player.Shoot.performed += ctx => _signalBus.Fire(new ShootSignal(true)); 
-        _input.Player.Shoot.canceled += ctx => _signalBus.Fire(new ShootSignal(false)); 
+        // _input.Player.Shoot.performed += ctx => _signalBus.Fire(new ShootSignal(true)); // удалить нахуй
+        // _input.Player.Shoot.canceled += ctx => _signalBus.Fire(new ShootSignal(false));  // удалить нахуй
     }
-
-    private void OnEnable()
-    {
-        _input.Enable();
-
-        _signalBus.Subscribe<ShootSignal>(OnShootButton);
-        _signalBus.Subscribe<MoveLeftSignal>(OnMoveLeft);
-        _signalBus.Subscribe<MoveRightSignal>(OnMoveRight);
-    }
-
-    private void OnDisable()
-    {
-        _input.Disable();
-
-        _signalBus.Unsubscribe<ShootSignal>(OnShootButton);
-        _signalBus.Unsubscribe<MoveLeftSignal>(OnMoveLeft);
-        _signalBus.Unsubscribe<MoveRightSignal>(OnMoveRight);
-    }
-
+    
     private void Update()
     {
         var mobileDir = MobileMove();
@@ -62,6 +47,35 @@ public class PlayerController : MonoBehaviour
         Move(_direction);
     }
 
+    private void OnEnable()
+    {
+        _input.Enable();
+
+        _signalBus.Subscribe<ShootSignal>(OnShootButton);
+        _signalBus.Subscribe<MoveLeftSignal>(OnMoveLeft);
+        _signalBus.Subscribe<MoveRightSignal>(OnMoveRight);
+        _signalBus.Subscribe<HealSignal>(OnHeal);
+        
+        Menu.OnMenuStateChanged += SetMenuState;
+    }
+
+    private void OnDisable()
+    {
+        _input.Disable();
+
+        _signalBus.Unsubscribe<ShootSignal>(OnShootButton);
+        _signalBus.Unsubscribe<MoveLeftSignal>(OnMoveLeft);
+        _signalBus.Unsubscribe<MoveRightSignal>(OnMoveRight);
+        _signalBus.Unsubscribe<HealSignal>(OnHeal);
+
+        Menu.OnMenuStateChanged -= SetMenuState;
+    }
+
+    private void SetMenuState(bool isOpnen)
+    {
+        _isMenuOpen = isOpnen;
+    }
+
     private void SetPriority(Vector2 mobileDir, Vector2 keyboardDir)
     {
         _direction = mobileDir != Vector2.zero ? mobileDir : keyboardDir;
@@ -69,6 +83,9 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 PCMove()
     {
+        if (_isMenuOpen)
+            return Vector2.zero;
+        
         Vector2 keyboardDir = _input.Player.Move.ReadValue<Vector2>();
         return keyboardDir;
     }
@@ -96,7 +113,19 @@ public class PlayerController : MonoBehaviour
 
     private void OnShootButton(ShootSignal signal)
     {
+        if (_isMenuOpen)
+            return;
+        
         _player.CurrentWeapon.HandleShooting(_raycastPoint, _playerVisual, signal.IsDown);
+    }
+
+    private void OnHeal(HealSignal signal)
+    {
+        if (!signal.IsDown)
+            return;
+        
+        Debug.Log("Хилл из PlayerController");
+        _player.Heal(_aidKit.HealCount);
     }
 
     private void Move(Vector2 direction)

@@ -12,8 +12,8 @@ public class Player : MonoBehaviour
     private Weapon _currentWeapon;
     private DoorUpgradeItem _doorUpgradeItem;
     public int AidKitCount { get; private set; }
-    public int Money { get; private set; } = 50;
-    public int Fragments { get; private set; } = 50;
+    public int Money { get; private set; }
+    public int Fragments { get; private set; }
     public float Speed => _speed;
     public Weapon CurrentWeapon => _currentWeapon;
     
@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
     public event UnityAction<int> FragmentsChanged;
     public event UnityAction<int, int> HealthChanged;
     public event UnityAction<int> DamageTaken;
+    public event UnityAction GameOver;
 
     private void Start()
     {
@@ -46,14 +47,23 @@ public class Player : MonoBehaviour
         MoneyChanged?.Invoke(Money);
     }
 
+    public void AddFragments(int count)
+    {
+        Fragments += count;
+        FragmentsChanged?.Invoke(Fragments);
+    }   
+
     public void Heal(int healCount)
     {
         if(AidKitCount <= 0)
             return;
-
+        
+        Debug.Log("Хилл из Player");
+        
         AidKitCount--;
-        _currentHealth = Mathf.Max(_currentHealth + healCount, _maxHealth);
+        _currentHealth = Mathf.Min(_currentHealth + healCount, _maxHealth);
         AidKitChanged?.Invoke(AidKitCount);
+        HealthChanged?.Invoke(_currentHealth, _maxHealth);
     }
 
     public void BuyItem(IShopItem item)
@@ -67,13 +77,16 @@ public class Player : MonoBehaviour
                 _weapons.Add(weapon);
                 Debug.Log($"Куплено оружие: {weapon.Label}");
                 break;
-            case AidKit kit:
+            case AidKit:
                 AidKitCount++;
                 AidKitChanged?.Invoke(AidKitCount);
                 Debug.Log($"Куплена аптечка. Всего аптечек: {AidKitCount}");
                 break;
-            case DoorUpgradeItem doorItem:
+            case DoorUpgradeItem:
                 Debug.Log("Двери ПРОКАЧАНЫ");
+                break;
+            case DoorRepairItem:
+                Debug.Log("Двери ПОЧИНЕНЫЫЫЫЫ");
                 break;
         }
     }
@@ -90,10 +103,10 @@ public class Player : MonoBehaviour
         }
     }
     
-
     private void Death()
     {
         gameObject.SetActive(false);
+        GameOver?.Invoke();
     }
 
     private bool IsDied()

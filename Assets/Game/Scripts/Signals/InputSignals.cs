@@ -27,3 +27,13 @@ public class MoveRightSignal
         IsDown = isDown;
     }
 }
+
+public class HealSignal
+{
+    public bool IsDown;
+
+    public HealSignal(bool isDown)
+    {
+        IsDown = isDown;
+    }
+}

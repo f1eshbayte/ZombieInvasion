@@ -4,7 +4,7 @@ using Zenject;
 
 public class MobileButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    public enum ButtonType { Left, Right, Shoot }
+    public enum ButtonType { Left, Right, Shoot, Heal }
     public ButtonType buttonType;
 
     private SignalBus _signalBus;
@@ -28,6 +28,9 @@ public class MobileButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             case ButtonType.Shoot:
                 _signalBus.Fire(new ShootSignal(true));
                 break;
+            case ButtonType.Heal:
+                _signalBus.Fire(new HealSignal(true));
+                break;
         }
     }
 
@@ -43,6 +46,9 @@ public class MobileButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
                 break;
             case ButtonType.Shoot:
                 _signalBus.Fire(new ShootSignal(false));
+                break;
+            case ButtonType.Heal:
+                _signalBus.Fire(new HealSignal(false));
                 break;
         }
     }

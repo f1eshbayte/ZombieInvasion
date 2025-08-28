@@ -47,3 +47,4 @@ MonoBehaviour:
   _label: "\u0410\u043F\u0442\u0435\u0447\u043A\u0430"
   _price: 2
   _icon: {fileID: -905758834, guid: 38d643359c295f746b85b660f0f37618, type: 3}
+  _healCount: 10

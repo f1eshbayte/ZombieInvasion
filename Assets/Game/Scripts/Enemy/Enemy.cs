@@ -7,6 +7,9 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private int _maxHealth;
     [SerializeField] private int _reward;
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _soundDying;
+    [SerializeField] private AudioClip _soundHit;
     
     private int _currentHealth;
     private EnemyStateMachine _stateMachine;
@@ -35,6 +38,7 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int damage)
     {
         _currentHealth -= damage;
+        _audioSource.PlayOneShot(_soundHit);
         DetectDie();
     }
     public void DisableEnemy()
@@ -52,6 +56,7 @@ public class Enemy : MonoBehaviour
     {
         if (_currentHealth <= 0)
         {
+            _audioSource.PlayOneShot(_soundDying);
             Dying?.Invoke(this);
         }
     }

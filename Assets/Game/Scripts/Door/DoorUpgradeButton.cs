@@ -3,10 +3,10 @@ using Zenject;
 
 public class DoorUpgradeButton : MonoBehaviour
 {
-    private DoorUpgradeService _service;
+    private DoorService _service;
 
     [Inject]
-    public void Construct(DoorUpgradeService service)
+    public void Construct(DoorService service)
     {
         _service = service;
     }

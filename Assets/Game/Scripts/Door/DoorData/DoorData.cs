@@ -5,17 +5,18 @@ using UnityEngine;
 public class DoorData : ScriptableObject
 {
     public int MaxHealth = 100;
-    public AudioClip damageSound; // Звук получения урона
+    public AudioClip DamageSound; // Звук получения урона
+    public int RepairPrice;
 
     [System.Serializable]
     public class DoorStage
     {
-        public int threshold; // HP <= threshold
-        public Sprite sprite; // Спрайт для этой стадии
-        public AudioClip thresholdSound; 
+        public int Threshold; // HP <= threshold
+        public Sprite Sprite; // Спрайт для этой стадии
+        public AudioClip ThresholdSound;
     }
 
-    public List<DoorStage> stages;
-    public AudioClip openSound;
-    public AudioClip closeSound;
+    public List<DoorStage> Stages;
+    public AudioClip OpenSound;
+    public AudioClip CloseSound;
 }

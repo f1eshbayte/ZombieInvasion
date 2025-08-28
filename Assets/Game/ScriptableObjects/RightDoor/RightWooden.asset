@@ -13,22 +13,23 @@ MonoBehaviour:
   m_Name: RightWooden
   m_EditorClassIdentifier: 
   MaxHealth: 100
-  damageSound: {fileID: 8300000, guid: e515c766813887d439fec0b8fb78afb2, type: 3}
-  stages:
-  - threshold: 100
-    sprite: {fileID: 1418316655, guid: 96e55f24026cabd4d9de34ef03738adf, type: 3}
-    thresholdSound: {fileID: 0}
-  - threshold: 70
-    sprite: {fileID: -237212028, guid: 96e55f24026cabd4d9de34ef03738adf, type: 3}
-    thresholdSound: {fileID: 8300000, guid: 6c990bbf455193148bb7a8e7b283f7d4, type: 3}
-  - threshold: 50
-    sprite: {fileID: 578372850, guid: 96e55f24026cabd4d9de34ef03738adf, type: 3}
-    thresholdSound: {fileID: 8300000, guid: 6c990bbf455193148bb7a8e7b283f7d4, type: 3}
-  - threshold: 30
-    sprite: {fileID: -592765875, guid: 96e55f24026cabd4d9de34ef03738adf, type: 3}
-    thresholdSound: {fileID: 8300000, guid: 6c990bbf455193148bb7a8e7b283f7d4, type: 3}
-  - threshold: 0
-    sprite: {fileID: 49815219, guid: 96e55f24026cabd4d9de34ef03738adf, type: 3}
-    thresholdSound: {fileID: 8300000, guid: a4e47bc09447dca4d93836196c32a291, type: 3}
-  openSound: {fileID: 8300000, guid: 555ed6ce36a4bb84f9aef2486d08887c, type: 3}
-  closeSound: {fileID: 8300000, guid: e43131243d8fd674eac9fe7ca843109e, type: 3}
+  DamageSound: {fileID: 8300000, guid: e515c766813887d439fec0b8fb78afb2, type: 3}
+  RepairPrice: 20
+  Stages:
+  - Threshold: 100
+    Sprite: {fileID: 633722477, guid: 5dd4bc6c139ef56489f3ccde0c457273, type: 3}
+    ThresholdSound: {fileID: 0}
+  - Threshold: 70
+    Sprite: {fileID: -842926787, guid: 5dd4bc6c139ef56489f3ccde0c457273, type: 3}
+    ThresholdSound: {fileID: 8300000, guid: 6c990bbf455193148bb7a8e7b283f7d4, type: 3}
+  - Threshold: 50
+    Sprite: {fileID: -763787721, guid: 5dd4bc6c139ef56489f3ccde0c457273, type: 3}
+    ThresholdSound: {fileID: 8300000, guid: 6c990bbf455193148bb7a8e7b283f7d4, type: 3}
+  - Threshold: 30
+    Sprite: {fileID: -2142392117, guid: 5dd4bc6c139ef56489f3ccde0c457273, type: 3}
+    ThresholdSound: {fileID: 8300000, guid: 6c990bbf455193148bb7a8e7b283f7d4, type: 3}
+  - Threshold: 0
+    Sprite: {fileID: 961208574, guid: 5dd4bc6c139ef56489f3ccde0c457273, type: 3}
+    ThresholdSound: {fileID: 8300000, guid: a4e47bc09447dca4d93836196c32a291, type: 3}
+  OpenSound: {fileID: 8300000, guid: 555ed6ce36a4bb84f9aef2486d08887c, type: 3}
+  CloseSound: {fileID: 8300000, guid: e43131243d8fd674eac9fe7ca843109e, type: 3}

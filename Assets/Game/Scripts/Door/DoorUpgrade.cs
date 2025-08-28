@@ -7,6 +7,7 @@ public class DoorUpgrade
     private readonly DoorData _ironDoor;    
     
     private Door _doorInstance; // ссылка на текущую дверь
+    
 
     public DoorUpgrade(DoorData wooden, DoorData strongWooden, DoorData iron)
     {
@@ -38,9 +39,13 @@ public class DoorUpgrade
             if (_doorInstance != null)
             {
                 _doorInstance.SetData(GetCurrentDoorData());
-                _doorInstance.Repair();
+                RepairDoor();
             }
         }
-        
+    }
+
+    public void RepairDoor()
+    {
+        _doorInstance.Repair();
     }
 }

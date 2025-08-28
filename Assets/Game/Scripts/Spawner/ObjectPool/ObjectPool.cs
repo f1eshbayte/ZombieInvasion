@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-    [SerializeField] private UnityEngine.GameObject _container;
+    [SerializeField] private GameObject _container;
 
-    private List<UnityEngine.GameObject> _pool = new List<UnityEngine.GameObject>();
+    private List<GameObject> _pool = new List<GameObject>();
 
-    protected bool TryGetObject(out UnityEngine.GameObject result)
+    protected bool TryGetObject(out GameObject result)
     {
         result = _pool.FirstOrDefault(p => p.activeSelf == false);
         return result != null;
     }
 
-    protected UnityEngine.GameObject CreateObject(UnityEngine.GameObject prefab)
+    protected GameObject CreateObject(GameObject prefab)
     {
-        UnityEngine.GameObject spawned = Instantiate(prefab, _container.transform);
+        GameObject spawned = Instantiate(prefab, _container.transform);
         spawned.SetActive(false);
         _pool.Add(spawned);
         return spawned;
